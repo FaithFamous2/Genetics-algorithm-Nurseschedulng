@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Nurse Schedule</title>
+    <!-- Bootstrap CSS -->
+    <link
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f0f2f5;
+      }
+
+      .container {
+        width: 90%;
+
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #ffffff;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        margin-top: 40px;
+      }
+
+      h1 {
+        text-align: center;
+        font-size: 24px;
+        margin-bottom: 20px;
+        color: #333;
+      }
+
+      .form-section {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        justify-content: space-between;
+      }
+
+      label {
+        font-weight: bold;
+        color: #333;
+        margin-bottom: 5px;
+      }
+
+      select,
+      input[type="text"],
+      input[type="number"] {
+        width: 100%;
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        margin-bottom: 10px;
+        box-sizing: border-box;
+      }
+
+      button {
+        padding: 12px 20px;
+        background-color: #3498db;
+        color: #ffffff;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 16px;
+        transition: background-color 0.3s ease;
+        display: block;
+        width: 100%;
+        margin-top: 10px;
+      }
+
+      button:hover {
+        background-color: #2980b9;
+      }
+
+      .calendar {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        gap: 10px;
+        margin-top: 20px;
+      }
+
+      .day-header {
+        font-weight: 700;
+        text-align: center;
+        color: #000000;
+        padding: 8px 0;
+        border-radius: 8px 8px 0 0;
+      }
+
+      .day {
+        background-color: #cdd6d8;
+        border: 1px solid #bdc3c7;
+        border-radius: 8px;
+        padding: 10px;
+        text-align: center;
+      }
+
+      .shift {
+        background-color: #ffffff;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        margin-top: 8px;
+        padding: 10px;
+        text-align: left;
+      }
+
+      .rainbow {
+        background-image: linear-gradient(
+          to right,
+          red,
+          orange,
+          yellow,
+          green,
+          blue,
+          indigo,
+          violet
+        );
+        border: none;
+        color: white;
+        font-weight: bold;
+      }
+
+      .footer {
+        text-align: center;
+        margin-top: 40px;
+        color: #7f8c8d;
+      }
+
+      .footer a {
+        color: #3498db;
+        text-decoration: none;
+        font-weight: 600;
+      }
+
+      .footer a:hover {
+        text-decoration: underline;
+      }
+      .genetic-params {
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 20px;
+        margin-top: 10px;
+        background-color: #f9f9f9;
+        display: flex;
+        width: 90%;
+        margin: 5%;
+        margin-right:10%;
+      }
+
+      .genetic-params h3 {
+        margin-bottom: 15px;
+        font-size: 18px;
+        color: #333;
+        text-align: center;
+      }
+
+      .param-group {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 15px;
+      }
+
+      .param-item {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .param-item label {
+        font-weight: bold;
+        margin-bottom: 5px;
+        color: #555;
+      }
+
+      .param-item input {
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        font-size: 14px;
+      }
+      .param-item textarea {
+        width: 150%; /* Full width of the container */
+        max-width: 600px; /* Maximum width to ensure it doesn't overflow */
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        font-size: 14px;
+        box-sizing: border-box;
+        resize: vertical; /* Allows vertical resizing only */
+      }
+
+      .param-item select {
+        width: 150%; /* Full width of the container */
+        max-width: 600px; /* Maximum width to ensure it doesn't overflow */
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        font-size: 14px;
+        box-sizing: border-box;
+        resize: vertical; /* Allows vertical resizing only */
+      }
+
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Nurse Schedule Optimization</h1>
+      <form id="schedule-form">
+        <!-- Form Sections for Compact Layout -->
+        <div class="form-section">
+          <!-- Days Selection -->
+
+        </div>
+
+        <!-- Nurses Input -->
+        <div class="form-section">
+
+          <!-- Genetic Algorithm Parameters -->
+          <div class="form-section genetic-params">
+            <div class="param-group">
+              <h3>Nurse Parameters</h3>
+              <div class="param-item"> <label for="days">Select Days:</label>
+                <select id="days" name="days" multiple>
+                  <option value="Monday">Monday</option>
+                  <option value="Tuesday">Tuesday</option>
+                  <option value="Wednesday">Wednesday</option>
+                  <option value="Thursday">Thursday</option>
+                  <option value="Friday">Friday</option>
+                  <option value="Saturday">Saturday</option>
+                  <option value="Sunday">Sunday</option>
+                </select>
+              </div>
+              <div class="param-item"> <label for="shifts">Select Shifts:</label>
+                <select id="shifts" name="shifts" multiple>
+                  <option value="Morning">Morning</option>
+                  <option value="Afternoon">Afternoon</option>
+                  <option value="Night">Night</option>
+                </select></div>
+                <div class="param-item">
+                  <label for="head-nurses">Head Nurses:</label>
+                  <textarea
+                    id="head-nurses"
+                    name="head_nurses"
+                    rows="3"
+                    placeholder="e.g., HN1, HN2, HN3"
+                    required
+                  >HN1,HN2,HN3,HN4,HN5,HN6,HN7,H8,H9,H10,H11,H12</textarea>
+                </div>
+
+                <div class="param-item">
+                  <label for="junior-nurses">Junior Nurses:</label>
+                  <textarea
+                    id="junior-nurses"
+                    name="junior_nurses"
+                    rows="4"
+                    placeholder="e.g., JN1, JN2, JN3"
+                    required
+                  >JN1,JN2,JN3,JN4,JN5,JN6,JN7,JN8,JN9,JN10,JN11,J12,J13,J14,J15,J16,J17,J18,J19,J20,J21,J22,J23,J24,J25,J26</textarea>
+                </div>
+
+        </div>
+        <div class="param-group"></div>
+
+
+
+          <div class="param-group">
+            <h3>Genetic Algorithm Parameters</h3>
+            <div class="param-item">
+              <label for="min-head-nurses">Min Head Nurses per Shift:</label>
+              <input
+                type="number"
+                id="min-head-nurses"
+                name="min_head_nurses"
+                value="1"
+                required
+              />
+            </div>
+
+            <div class="param-item">
+              <label for="population-size">Population Size:</label>
+              <input
+                type="number"
+                id="population-size"
+                name="population_size"
+                value="50"
+                required
+              />
+            </div>
+
+            <div class="param-item">
+              <label for="max-generations">Max Generations:</label>
+              <input
+                type="number"
+                id="max-generations"
+                name="max_generations"
+                value="100"
+                required
+              />
+            </div>
+
+            <div class="param-item">
+              <label for="crossover-rate">Crossover Rate:</label>
+              <input
+                type="number"
+                step="0.01"
+                id="crossover-rate"
+                name="crossover_rate"
+                value="0.8"
+                required
+              />
+            </div>
+
+            <div class="param-item">
+              <label for="mutation-rate">Mutation Rate:</label>
+              <input
+                type="number"
+                step="0.01"
+                id="mutation-rate"
+                name="mutation_rate"
+                value="0.1"
+                required
+              />
+            </div>
+          </div>
+        </div>
+
+        <button type="submit" id="generate-schedule">Generate Schedule</button>
+      </form>
+
+      <!-- Calendar Display -->
+      <div id="calendar" class="calendar"></div>
+
+      <button
+        type="button"
+        id="regenerate-schedule"
+        class="rainbow regenerate-button"
+      >
+        Regenerate Schedule
+      </button>
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        // Pre-selected values
+        const selectedDays = [
+          "Monday",
+          "Tuesday",
+          "Wednesday",
+          "Thursday",
+          "Friday",
+          "Saturday",
+          "Sunday",
+        ];
+        const selectedShifts = ["Morning", "Afternoon", "Night"];
+
+        // Set selected options for days and shifts
+        function setSelectedOptions(selectId, values) {
+          const selectElement = document.getElementById(selectId);
+          for (const option of selectElement.options) {
+            option.selected = values.includes(option.value);
+          }
+        }
+
+        // Apply pre-selection
+        setSelectedOptions("days", selectedDays);
+        setSelectedOptions("shifts", selectedShifts);
+
+        // Function to display the schedule
+        function displaySchedule(data) {
+          const calendarEl = document.getElementById("calendar");
+          if (!data || !data.schedule) {
+            console.error("Invalid schedule data received:", data);
+            return;
+          }
+          calendarEl.innerHTML = generateCalendarHtml(data.schedule);
+        }
+
+        // Dynamic colors for shifts
+        const shiftColors = {
+          Morning: "#FFEB3B", // Yellow
+          Afternoon: "#FF9800", // Orange
+          Night: "#3F51B5", // Blue
+        };
+
+        // Generate HTML for the schedule with ordered shifts
+        function generateCalendarHtml(schedule) {
+          const daysOfWeek = [
+            "Monday",
+            "Tuesday",
+            "Wednesday",
+            "Thursday",
+            "Friday",
+            "Saturday",
+            "Sunday",
+          ];
+
+          const shiftOrder = ["Morning", "Afternoon", "Night"]; // Order for shifts
+
+          let html = "";
+
+          daysOfWeek.forEach((day) => {
+            if (schedule[day]) {
+              html += `<div class="day">
+                        <div class="day-header">${day}</div>`;
+
+              shiftOrder.forEach((shift) => {
+                if (schedule[day][shift]) {
+                  const headNurses = schedule[day][shift]["Head Nurse"] || [];
+                  const juniorNurses =
+                    schedule[day][shift]["Junior Nurse"] || [];
+                  const shiftColor = shiftColors[shift] || "#FFFFFF"; // Default to white if no color is found
+
+                  html += `<div class="shift" style="background-color: ${shiftColor};">
+                              <strong>${shift} Shift:</strong><br>
+                              <strong>Head Nurses:</strong> ${headNurses.join(
+                                ", "
+                              )}<br>
+                              <strong>Junior Nurses:</strong> ${juniorNurses.join(
+                                ", "
+                              )}
+                            </div>`;
+                }
+              });
+
+              html += `</div>`;
+            }
+          });
+
+          return html;
+        }
+
+        // Handle form submission
+        const scheduleForm = document.getElementById("schedule-form");
+        scheduleForm.addEventListener("submit", function (e) {
+          e.preventDefault();
+
+          const formData = new FormData(scheduleForm);
+          const data = {
+            days: Array.from(formData.getAll("days")),
+            shifts: Array.from(formData.getAll("shifts")),
+            head_nurses: formData.get("head_nurses"),
+            junior_nurses: formData.get("junior_nurses"),
+            min_head_nurses: formData.get("min_head_nurses"),
+            population_size: formData.get("population_size"),
+            max_generations: formData.get("max_generations"),
+            crossover_rate: formData.get("crossover_rate"),
+            mutation_rate: formData.get("mutation_rate"),
+          };
+
+          fetch("/generate_schedule", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data),
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              displaySchedule(data);
+            })
+            .catch((error) => {
+              console.error("Error generating schedule:", error);
+            });
+        });
+
+        // Handle regenerate schedule button click
+        document
+          .getElementById("regenerate-schedule")
+          .addEventListener("click", function () {
+            scheduleForm.dispatchEvent(new Event("submit"));
+          });
+      });
+    </script>
+    <div class="footer">
+      &copy; <a href="https://famouzcoder.com">famouzcoder</a>
+      <script>
+        document.write(new Date().getFullYear());
+      </script>
+      All Rights Reserved.
+    </div>
+  </body>
+</html>
